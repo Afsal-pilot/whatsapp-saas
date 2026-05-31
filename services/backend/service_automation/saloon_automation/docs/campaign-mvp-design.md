@@ -1,6 +1,6 @@
 # WAPI Promotional Campaign — MVP Design Document
 
-> **Status:** Final draft for engineering execution
+> **Status:** V1 draft for engineering execution
 > **Version:** MVP v1
 > **Date:** 2026-05-31
 > **Owner:** Afsal
