@@ -10,7 +10,7 @@
  *   2. Register the same phone_number_id with Meta against your WhatsApp app.
  *   3. No code changes needed — this resolver picks it up automatically.
  */
-import { supabase } from "@/core/clients/supabase";
+import { supabase } from "@whatsapp-saas/wapi-db";
 import { logger } from "@/core/logger";
 import type { Tenant, SegmentName } from "./types";
 

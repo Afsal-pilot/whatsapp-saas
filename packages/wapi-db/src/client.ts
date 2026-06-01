@@ -2,6 +2,10 @@
  * Server-side Supabase clients (service role — bypasses RLS).
  * NEVER import from anywhere that ships to the browser.
  *
+ * Shared across every WAPI service. Each consumer is responsible for loading
+ * SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY into process.env before importing
+ * this module (e.g. via dotenv, `--env-file`, or the framework's env loader).
+ *
  * Two doors into the database:
  *
  *   supabase()              — raw client. Use ONLY for non-tenant tables
@@ -19,16 +23,29 @@
  * certainly want tenantClient() instead.
  */
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
-import { env } from "@/core/config/env";
 
 let _client: SupabaseClient | null = null;
 
+function requireEnv(key: string): string {
+  const value = process.env[key];
+  if (!value) {
+    throw new Error(
+      `@whatsapp-saas/wapi-db: missing env ${key}. Load it before importing this module.`,
+    );
+  }
+  return value;
+}
+
 export function supabase(): SupabaseClient {
   if (_client) return _client;
-  _client = createClient(env.SUPABASE_URL, env.SUPABASE_SERVICE_ROLE_KEY, {
-    auth: { persistSession: false, autoRefreshToken: false },
-    db: { schema: "public" },
-  });
+  _client = createClient(
+    requireEnv("SUPABASE_URL"),
+    requireEnv("SUPABASE_SERVICE_ROLE_KEY"),
+    {
+      auth: { persistSession: false, autoRefreshToken: false },
+      db: { schema: "public" },
+    },
+  );
   return _client;
 }
 

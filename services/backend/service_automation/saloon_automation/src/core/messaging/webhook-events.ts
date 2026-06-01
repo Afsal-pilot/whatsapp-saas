@@ -8,7 +8,7 @@
  *
  * Treat that as the only legitimate cross-tenant write in the codebase.
  */
-import { supabase } from "@/core/clients/supabase";
+import { supabase } from "@whatsapp-saas/wapi-db";
 
 export type WebhookEventStatus = "received" | "processing" | "processed" | "failed";
 

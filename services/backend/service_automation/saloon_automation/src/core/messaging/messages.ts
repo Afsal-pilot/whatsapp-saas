@@ -19,7 +19,7 @@
  *
  * All queries go through `TenantClient` — see `clients/supabase.ts` for why.
  */
-import type { TenantClient } from "@/core/clients/supabase";
+import type { TenantClient } from "@whatsapp-saas/wapi-db";
 import type { ChatMessage } from "@/core/clients/claude";
 
 const DEFAULT_HISTORY_TURNS = 20;

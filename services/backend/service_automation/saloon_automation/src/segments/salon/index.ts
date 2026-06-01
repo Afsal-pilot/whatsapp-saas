@@ -19,7 +19,7 @@ import type {
   SegmentContext,
   ReplyHookResult,
 } from "../types";
-import type { TenantClient } from "@/core/clients/supabase";
+import type { TenantClient } from "@whatsapp-saas/wapi-db";
 import type { Tenant } from "@/core/tenants/types";
 import { parseSalonConfig } from "./config";
 import { buildSalonSystemPrompt } from "./prompt";

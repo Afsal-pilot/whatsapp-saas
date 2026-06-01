@@ -5,7 +5,7 @@
  * rather than blocking the reply. They each do ONE small indexed read so
  * the latency cost on the hot path is minimal.
  */
-import type { TenantClient } from "@/core/clients/supabase";
+import type { TenantClient } from "@whatsapp-saas/wapi-db";
 import { logger } from "@/core/logger";
 
 const RETURNING_THRESHOLD_MS = 30 * 60 * 1000; // 30 min — anything older counts as "returning"

@@ -13,7 +13,7 @@
  * scoped by construction. Do not introduce a `tenantId: string` overload —
  * the wrapper is the seam that prevents cross-tenant bleed.
  */
-import type { TenantClient } from "@/core/clients/supabase";
+import type { TenantClient } from "@whatsapp-saas/wapi-db";
 
 export type User = {
   id: string;

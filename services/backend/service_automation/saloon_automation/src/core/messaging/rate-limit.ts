@@ -10,7 +10,7 @@
  * Returns `{ allowed: true }` when the message may proceed, or
  * `{ allowed: false, retryAfterMs }` when blocked.
  */
-import { supabase } from "@/core/clients/supabase";
+import { supabase } from "@whatsapp-saas/wapi-db";
 import { logger } from "@/core/logger";
 import { env } from "@/core/config/env";
 

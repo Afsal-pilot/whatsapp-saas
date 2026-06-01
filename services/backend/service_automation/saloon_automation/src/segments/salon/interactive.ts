@@ -14,7 +14,7 @@
  */
 import { z } from "zod";
 import { logger } from "@/core/logger";
-import type { ButtonsPayload, ListPayload } from "@/core/clients/whatsapp";
+import type { ButtonsPayload, ListPayload } from "@whatsapp-saas/wapi-meta";
 
 export const INTERACTIVE_MARKER = "[INTERACTIVE]";
 

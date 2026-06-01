@@ -13,7 +13,7 @@ A pnpm + Turbo monorepo skeleton for a WhatsApp SaaS product. This is a starter 
 
 ## Cross-cutting folders
 
-- `services/backend/service_automation/saloon_automation/supabase/migrations` — database schema and migrations (shared by all services)
+- `supabase/migrations` — database schema and migrations (shared by all services)
 - `services/backend/service_automation/saloon_automation/terraform` — Cloudflare / Vercel infra-as-code
 - `services/backend/service_automation/saloon_automation/docs/` — architecture, runbook, setup guides
 
