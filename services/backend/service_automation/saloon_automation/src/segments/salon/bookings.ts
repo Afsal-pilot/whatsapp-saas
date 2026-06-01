@@ -9,7 +9,7 @@
  * (slashes, dots, single-digit components, AM/PM) so a small drift doesn't
  * silently drop the booking on the floor.
  */
-import type { TenantClient } from "@/core/clients/supabase";
+import type { TenantClient } from "@whatsapp-saas/wapi-db";
 import { logger } from "@/core/logger";
 import { BOOKING_MARKER } from "./prompt";
 

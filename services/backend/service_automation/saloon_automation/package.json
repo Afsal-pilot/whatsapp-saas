@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev --port 3002",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
@@ -14,14 +14,15 @@
     "check:config": "tsx scripts/check-config.ts",
     "deploy": "bash scripts/deploy.sh",
     "smoke": "tsx scripts/smoke-test.ts",
-    "backfill:tenant-phone": "tsx scripts/backfill-tenant-phone.ts",
-    "test:tenant-isolation": "tsx scripts/test-tenant-isolation.ts"
+    "backfill:tenant-phone": "tsx scripts/backfill-tenant-phone.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.40.0",
     "@sentry/nextjs": "^8.40.0",
     "@supabase/supabase-js": "^2.45.0",
     "@upstash/qstash": "^2.7.0",
+    "@whatsapp-saas/wapi-db": "workspace:*",
+    "@whatsapp-saas/wapi-meta": "workspace:*",
     "next": "14.2.18",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",

@@ -32,9 +32,9 @@ Follow [setup-meta.md](./setup-meta.md). At the end you'll have:
    - Project URL → `SUPABASE_URL`
    - `service_role` key → `SUPABASE_SERVICE_ROLE_KEY`
    - `anon` key → `NEXT_PUBLIC_SUPABASE_ANON_KEY`
-3. Apply the schema. Either:
-   - SQL editor: paste `supabase/migrations/0001_init.sql` and run.
-   - CLI: `supabase link --project-ref <ref> && supabase db push`
+3. Apply the schema. From the **monorepo root** (migrations live at root-level `supabase/migrations/`, shared across services):
+   - CLI (recommended): `cd <repo-root> && supabase link --project-ref <ref> && supabase db push`
+   - SQL editor (manual): paste each file from `supabase/migrations/` in numeric order, starting at `0001_init.sql`.
 4. Seed a default tenant (one-off):
    ```sql
    INSERT INTO tenants (id, name)

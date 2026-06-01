@@ -46,7 +46,6 @@ The design is driven by **Meta's 2025/2026 rules** (see Appendix A). Anything th
 ### Deferred for separate discussion
 
 - **Embedded Signup integration details** (Meta-hosted popup vs custom flow, JS SDK wrapping, access-token rotation handling) — decision is "use Embedded Signup," implementation TBD.
-- **Pricing model finalization** — pass-through model agreed in principle; platform fee tier TBD.
 - **Dashboard auth method** — Supabase Auth vs SSO.
 
 ---
@@ -270,7 +269,7 @@ NEW: tryHandleOptOut(inbound)
 
 ## 5. Data model
 
-All new tables follow the existing RLS pattern at `services/backend/service_automation/saloon_automation/supabase/migrations/0001_init.sql:108-123`:
+All new tables follow the existing RLS pattern at `supabase/migrations/0001_init.sql:108-123` (root-level shared schema, accessible to every service):
 
 ```sql
 ALTER TABLE <table> ENABLE ROW LEVEL SECURITY;
@@ -280,7 +279,22 @@ CREATE POLICY tenant_isolation_<table> ON <table>
 
 Server workers use `TenantClient` from `src/core/clients/supabase.ts` which scopes by tenant explicitly via service role.
 
-Migration file: `services/backend/service_automation/saloon_automation/supabase/migrations/0006_campaigns.sql`
+Migration files: split into one focused file per concern (`0006`–`0017`) for atomic review and selective rollback. Apply in numeric order:
+
+| # | File | Purpose |
+|---|---|---|
+| 0006 | `tenants_extend.sql` | ALTER tenants: waba_id, encrypted_meta_token, display_name, tenant_slug, current_quality_rating, current_tier, monthly_marketing_budget_cents + CHECK constraints |
+| 0007 | `users_extend.sql` | ALTER users: marketing_consent_at, opted_out_at + partial indexes |
+| 0008 | `messages_conversation_nullable.sql` | ALTER messages.conversation_id DROP NOT NULL |
+| 0009 | `templates.sql` | CREATE templates + RLS + indexes |
+| 0010 | `campaigns.sql` | CREATE campaigns + RLS + indexes |
+| 0011 | `messages_campaign_link.sql` | ALTER messages ADD campaign_id FK + index |
+| 0012 | `campaign_recipients.sql` | CREATE campaign_recipients + RLS + indexes |
+| 0013 | `consent_events.sql` | CREATE consent_events + RLS + indexes + `is_opted_in()` helper |
+| 0014 | `user_marketing_quotas.sql` | CREATE user_marketing_quotas (global, no RLS) |
+| 0015 | `billing_ledger_entries.sql` | CREATE billing_ledger_entries + RLS + indexes |
+| 0016 | `messages_status_mirror_trigger.sql` | messages → campaign_recipients status mirror |
+| 0017 | `campaign_counters_trigger.sql` | campaign_recipients → campaigns counter delta |
 
 ### 5.1 Changes to EXISTING tables
 
@@ -764,33 +778,7 @@ Each new handler is just a new branch in the existing switch statement in `/api/
 
 ---
 
-## 9. Pricing & billing (MVP)
-
-**Model:** Pure pass-through (Meta's actual delivered cost) + optional platform fee.
-
-**Tenant sees in dashboard before sending:**
-```
-Audience: 1,800 recipients
-  India:  1,800 × ₹1.20 = ₹2,160
-Total est. cost:                 ₹2,160
-Monthly remaining budget:        ₹7,840 / ₹10,000
-[ Confirm & Send ]
-```
-
-**Lifecycle:**
-1. `validateCampaignDraft` checks `tenant.monthly_marketing_budget_cents` not exceeded
-2. On confirm: insert `billing_ledger_entries` (`type='reservation'`)
-3. As delivery webhooks arrive: `actual_cost_cents` incremented on `campaigns`
-4. On campaign complete: `billing_ledger_entries` finalises to actual amount
-5. Reservation → final reconciliation creates an `adjustment` entry if needed
-
-**Charging only for delivered messages** (matches Meta's billing model exactly).
-
-**Platform fee:** TBD — start with pure pass-through, add subscription tier post-launch.
-
----
-
-## 10. Observability
+## 9. Observability
 
 | Signal | Mechanism | Action |
 |---|---|---|
@@ -805,7 +793,7 @@ Existing Sentry integration (`captureException` across the codebase) gets the ne
 
 ---
 
-## 11. Security
+## 10. Security
 
 | Area | Approach |
 |---|---|
@@ -820,7 +808,7 @@ Existing Sentry integration (`captureException` across the codebase) gets the ne
 
 ---
 
-## 12. Verification
+## 11. Verification
 
 | # | Test | Pass criteria |
 |---|---|---|
@@ -842,7 +830,7 @@ Existing Sentry integration (`captureException` across the codebase) gets the ne
 
 ---
 
-## 13. Phasing
+## 12. Phasing
 
 ### Phase 0 — Foundation (~1 week, blocks everything)
 
@@ -883,19 +871,18 @@ Existing Sentry integration (`captureException` across the codebase) gets the ne
 
 ---
 
-## 14. Still-open questions
+## 13. Still-open questions
 
-1. **Pricing pass-through model finalised** — pass-through agreed; platform fee tier (₹999/mo? per-message markup? quota+overage?) decide post-launch based on usage data.
-2. **Data residency.** Any EU-based tenants? If yes, commit to a region story now (V3 work) or defer with explicit risk acknowledgement.
-3. **Dashboard auth.** Supabase Auth (email magic link) or SSO from day one?
-4. **Embedded Signup integration details** — deferred per §1 to a separate session.
+1. **Data residency.** Any EU-based tenants? If yes, commit to a region story now (V3 work) or defer with explicit risk acknowledgement.
+2. **Dashboard auth.** Supabase Auth (email magic link) or SSO from day one?
+3. **Embedded Signup integration details** — deferred per §1 to a separate session.
 
 ---
 
 ## Critical files inventory
 
 ### New
-- `services/backend/service_automation/saloon_automation/supabase/migrations/0006_campaigns.sql`
+- `supabase/migrations/0006_*.sql` through `0017_*.sql` (root-level shared schema)
 - `src/core/campaigns/{validate,audience,cost,dispatch,opt-out,quotas,pricing}.ts`
 - `src/core/campaigns/templates/{submit,media}.ts`
 - `src/core/campaigns/billing/reservation.ts`

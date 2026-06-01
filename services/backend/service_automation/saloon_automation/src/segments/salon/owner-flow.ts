@@ -23,9 +23,9 @@
  * (logged + Sentry'd) — the workaround is a Utility template, which is a
  * v2 feature.
  */
-import type { TenantClient } from "@/core/clients/supabase";
+import type { TenantClient } from "@whatsapp-saas/wapi-db";
 import type { Tenant } from "@/core/tenants/types";
-import { sendButtons, sendText } from "@/core/clients/whatsapp";
+import { sendButtons, sendText } from "@whatsapp-saas/wapi-meta";
 import { logger } from "@/core/logger";
 import { captureException } from "@/core/sentry";
 import type { OwnerHookResult, OwnerInbound } from "../types";

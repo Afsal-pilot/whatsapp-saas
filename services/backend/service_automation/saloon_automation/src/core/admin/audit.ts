@@ -2,7 +2,7 @@
  * Audit log — every admin action is recorded with actor + target + details.
  * Best-effort: a failure here logs a warning but never blocks the action.
  */
-import { supabase } from "@/core/clients/supabase";
+import { supabase } from "@whatsapp-saas/wapi-db";
 import { getRequestId } from "@/core/context";
 import { logger } from "@/core/logger";
 

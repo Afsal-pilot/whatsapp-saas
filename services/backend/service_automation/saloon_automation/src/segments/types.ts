@@ -15,9 +15,9 @@
  * segment also needs it.
  */
 import type { ChatMessage } from "@/core/clients/claude";
-import type { TenantClient } from "@/core/clients/supabase";
+import type { TenantClient } from "@whatsapp-saas/wapi-db";
 import type { Tenant } from "@/core/tenants/types";
-import type { ButtonsPayload, ListPayload } from "@/core/clients/whatsapp";
+import type { ButtonsPayload, ListPayload } from "@whatsapp-saas/wapi-meta";
 
 export type SegmentContext = {
   tenant: Tenant;

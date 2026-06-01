@@ -30,8 +30,8 @@ import { z } from "zod";
 import { logger } from "@/core/logger";
 import { setContext } from "@/core/context";
 import { captureMessage } from "@/core/sentry";
-import { tenantClient } from "@/core/clients/supabase";
-import { markRead, sendButtons, sendList, sendText } from "@/core/clients/whatsapp";
+import { tenantClient } from "@whatsapp-saas/wapi-db";
+import { markRead, sendButtons, sendList, sendText } from "@whatsapp-saas/wapi-meta";
 import { complete } from "@/core/clients/claude";
 import { env } from "@/core/config/env";
 import {

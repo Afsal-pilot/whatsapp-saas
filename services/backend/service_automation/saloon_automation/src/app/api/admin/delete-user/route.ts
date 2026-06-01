@@ -19,7 +19,7 @@ import { z } from "zod";
 import { authorizeAdmin } from "@/core/admin/auth";
 import { audit } from "@/core/admin/audit";
 import { runWithContext } from "@/core/context";
-import { tenantClient } from "@/core/clients/supabase";
+import { tenantClient } from "@whatsapp-saas/wapi-db";
 import { logger } from "@/core/logger";
 
 export const runtime = "nodejs";

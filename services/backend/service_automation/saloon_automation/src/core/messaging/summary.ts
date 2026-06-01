@@ -12,7 +12,7 @@
  * goes out with the recent window only.
  */
 import { complete, type ChatMessage } from "@/core/clients/claude";
-import type { TenantClient } from "@/core/clients/supabase";
+import type { TenantClient } from "@whatsapp-saas/wapi-db";
 import { updateConversationSummary } from "./conversations";
 import { logger } from "@/core/logger";
 
